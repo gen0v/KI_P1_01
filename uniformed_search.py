@@ -40,19 +40,21 @@ class Search:
       frontier.put(node)
       explored = []
       while 1:
-         print("---")
+         #print("---")
          if frontier.empty():
             return(node.name,0)
          node = frontier.get()
          explored.append(node)
          for edge in node.edges:
-            
-            print(edge.end.name)
             child = edge.end
+            #print(child.path)
             if child not in explored:
+               #save the edge
+               child.path = child.path + node.path
+               child.path.append(edge)
                child.value = node.value + edge.value
                if child == ept:
-                  print (child.edges)
+                  print (child.path)
                   return (child.name, child.value)
                frontier.put(child)
                

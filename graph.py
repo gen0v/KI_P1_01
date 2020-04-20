@@ -8,6 +8,7 @@ class Node:
        self.name = name
        self.edges = []
        self.value = 0
+       self.path = []
      
 
 class Edge:
