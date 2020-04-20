@@ -16,6 +16,9 @@ class Edge:
       self.start = edge[0]
       self.end = edge[1]
       self.value = edge[2]
+   
+   def __repr__(self):
+      return (self.start.name + " --> " + self.end.name)
 
 
 class Graph:

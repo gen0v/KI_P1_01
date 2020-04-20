@@ -52,6 +52,7 @@ class Search:
             if child not in explored:
                child.value = node.value + edge.value
                if child == ept:
+                  print (child.edges)
                   return (child.name, child.value)
                frontier.put(child)
                
