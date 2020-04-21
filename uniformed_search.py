@@ -32,18 +32,18 @@ class Search:
    def __init__(self, graph: Graph):
       self.graph = graph
    
-   def bfs(self, spt, ept) -> tuple:
+   def dfs(self, spt, ept) -> tuple:
       node = spt
       if node == ept:
          return (node,0)
-      frontier = Queue()
+      frontier = LifoQueue()
       path = []
       frontier.put((node, path))
       explored = []
       while 1:
          #print("---")
          if frontier.empty():
-            return(node.name,path)
+            return(node.value,path)
          tpl = frontier.get()
          node = tpl[0]
          path = tpl[1]
@@ -59,9 +59,69 @@ class Search:
                child.value = node.value + edge.value
                if child == ept:
                   #print (childpath)
-                  return (child.name, childpath)
+                  return (child.value, childpath)
                frontier.put((child,childpath))
 
+   def bfs(self, spt, ept) -> tuple:
+      node = spt
+      if node == ept:
+         return (node,0)
+      frontier = Queue()
+      path = []
+      frontier.put((node, path))
+      explored = []
+      while 1:
+         #print("---")
+         if frontier.empty():
+            return(node.value,path)
+         tpl = frontier.get()
+         node = tpl[0]
+         path = tpl[1]
+         explored.append(node)
+         for edge in node.edges:
+            child = edge.end
+            childpath = []
+            #print(child.path)
+            if child not in explored:
+               #save the edge
+               childpath = childpath + path
+               childpath.append(edge)
+               child.value = node.value + edge.value
+               if child == ept:
+                  #print (childpath)
+                  return (child.value, childpath)
+               frontier.put((child,childpath))
+   
+   #TODO
+   def ucs(self, spt, ept) -> tuple:
+      node = spt
+      if node == ept:
+         return (node,0)
+      frontier = PriorityQueue()
+      path = []
+      frontier.put((node, path))
+      explored = []
+      while 1:
+         #print("---")
+         if frontier.empty():
+            return(node.value,path)
+         tpl = frontier.get()
+         node = tpl[0]
+         path = tpl[1]
+         explored.append(node)
+         for edge in node.edges:
+            child = edge.end
+            childpath = []
+            #print(child.path)
+            if child not in explored:
+               #save the edge
+               childpath = childpath + path
+               childpath.append(edge)
+               child.value = node.value + edge.value
+               if child == ept:
+                  #print (childpath)
+                  return (child.value, childpath)
+               frontier.put((child,childpath))
 
 
                
@@ -70,7 +130,20 @@ class Search:
    
 def __repr__(self):
    return (self.start.name + " --> " + self.end.name)
+def 
+
+
 setattr(Edge,"__repr__",__repr__)
 
+
 search = Search(romania)
+
+print("BFS from BU to TI")
 print(search.bfs(getNode("Bu",romania.nodes), getNode("Ti",romania.nodes)))
+
+print("DFS from BU to TI")
+print(search.dfs(getNode("Bu",romania.nodes), getNode("Ti",romania.nodes)))
+
+#TODO
+print("UCS from BU to TI")
+print(search.ucs(getNode("Bu",romania.nodes), getNode("Ti",romania.nodes)))
