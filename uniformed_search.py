@@ -36,76 +36,98 @@ class Search:
    def __init__(self, graph: Graph):
       self.graph = graph
       self.backup_graph = graph
+      #self.graph.Print()
+
    def reset(self):
-      self.graph = self.backup_graph
+      for n in self.graph.nodes:
+         n.reset()
    
+   # def dfs(self, spt, ept) -> tuple:
+   #    self.reset()
+   #    node = spt
+   #    if node == ept:
+   #       return (node,0)
+   #    frontier = LifoQueue()
+   #    path = []
+   #    frontier.put((node, path))
+   #    explored = []
+   #    while 1:
+   #       #print("---")
+   #       if frontier.empty():
+   #          return(node.value,path)
+   #       tpl = frontier.get()
+   #       node = tpl[0]
+   #       path = tpl[1]
+   #       explored.append(node)
+   #       for edge in node.edges:
+   #          child = edge.end
+   #          childpath = []
+   #          #print(child.path)
+   #          if child not in explored:
+   #             #save the edge
+   #             childpath = childpath + path
+   #             childpath.append(edge)
+   #             child.value = node.value + edge.value
+   #             if child == ept:
+   #                #print (childpath)
+   #                return (child.value, childpath)
+   #             frontier.put((child,childpath))
+
    def dfs(self, spt, ept) -> tuple:
       self.reset()
       node = spt
       if node == ept:
-         return (node,0)
+         return (0,[])
       frontier = LifoQueue()
-      path = []
-      frontier.put((node, path))
+      frontier.put(node)
       explored = []
       while 1:
-         #print("---")
          if frontier.empty():
             return(node.value,path)
-         tpl = frontier.get()
-         node = tpl[0]
-         path = tpl[1]
+         node = frontier.get()
          explored.append(node)
          for edge in node.edges:
             child = edge.end
-            childpath = []
-            #print(child.path)
+            child.path = []
             if child not in explored:
                #save the edge
-               childpath = childpath + path
-               childpath.append(edge)
+               child.path = child.path + node.path
+               child.path.append(edge)
                child.value = node.value + edge.value
                if child == ept:
-                  #print (childpath)
-                  return (child.value, childpath)
-               frontier.put((child,childpath))
+                  return (child.value, child.path)
+               frontier.put(child)
 
    def bfs(self, spt, ept) -> tuple:
       self.reset()
       node = spt
       if node == ept:
-         return (node,0)
+         return (0,[])
       frontier = Queue()
-      path = []
-      frontier.put((node, path))
+      frontier.put(node)
       explored = []
       while 1:
-         #print("---")
          if frontier.empty():
             return(node.value,path)
-         tpl = frontier.get()
-         node = tpl[0]
-         path = tpl[1]
+         node = frontier.get()
          explored.append(node)
          for edge in node.edges:
             child = edge.end
-            childpath = []
-            #print(child.path)
+            child.path = []
             if child not in explored:
                #save the edge
-               childpath = childpath + path
-               childpath.append(edge)
+               child.path = child.path + node.path
+               child.path.append(edge)
                child.value = node.value + edge.value
                if child == ept:
-                  #print (childpath)
-                  return (child.value, childpath)
-               frontier.put((child,childpath))
+                  return (child.value, child.path)
+               frontier.put(child)
    
    def ucs(self, spt, ept) -> tuple:
       self.reset()
       node = spt
       if node == ept:
-         return (node,0)
+         return (0,[])
       heap = []
       path = []
       heapq.heappush(heap, node)
@@ -148,18 +170,22 @@ def __lt__N(self, other: Node):
 def __lt__E(self, other: Edge):
    return self.value < other.value
 
+def reset(self: Node):
+   self.value = 0
+   self.path = []
+
 setattr(Node,"__lt__",__lt__N)
+setattr(Node,"reset",reset)
 setattr(Edge,"__lt__",__lt__E)
 setattr(Edge,"__repr__",__repr__)
 setattr(Node,"path",[])
 
 search = Search(romania)
+print("UCS from BU to TI")
+print(search.ucs(getNode("Ti",romania.nodes), getNode("Bu",romania.nodes)))
 
 print("BFS from BU to TI")
 print(search.bfs(getNode("Bu",romania.nodes), getNode("Ti",romania.nodes)))
 
 print("DFS from BU to TI")
 print(search.dfs(getNode("Bu",romania.nodes), getNode("Ti",romania.nodes)))
-
-print("UCS from BU to TI")
-print(search.ucs(getNode("Ti",romania.nodes), getNode("Bu",romania.nodes)))

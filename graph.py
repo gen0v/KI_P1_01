@@ -40,7 +40,7 @@ class Graph:
       for node in node_list:
          edge_values = ['X'] * len(node_list)
          for edge in node.edges:
-            edge_values[ next((i for i,e in enumerate(node_list) if e.name == edge.end) , -1)] = edge.value           
+            edge_values[ next((i for i,e in enumerate(node_list) if e.name == edge.end.name) , -1)] = edge.value           
 
          t.add_row([node.name] + edge_values)
       print(t)
