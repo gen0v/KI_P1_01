@@ -31,34 +31,42 @@ romania = Graph( ['Or', 'Ne', 'Ze', 'Ia', 'Ar', 'Si', 'Fa',
 class Search:
    def __init__(self, graph: Graph):
       self.graph = graph
-
+   
    def bfs(self, spt, ept) -> tuple:
       node = spt
       if node == ept:
          return (node,0)
       frontier = Queue()
-      frontier.put(node)
+      path = []
+      frontier.put((node, path))
       explored = []
       while 1:
          #print("---")
          if frontier.empty():
-            return(node.name,0)
-         node = frontier.get()
+            return(node.name,path)
+         tpl = frontier.get()
+         node = tpl[0]
+         path = tpl[1]
          explored.append(node)
          for edge in node.edges:
             child = edge.end
+            childpath = []
             #print(child.path)
             if child not in explored:
                #save the edge
-               child.path = child.path + node.path
-               child.path.append(edge)
+               childpath = childpath + path
+               childpath.append(edge)
                child.value = node.value + edge.value
                if child == ept:
-                  print (child.path)
-                  return (child.name, child.value)
-               frontier.put(child)
+                  #print (childpath)
+                  return (child.name, childpath)
+               frontier.put((child,childpath))
+
+
+
                
       
+
 
 
 search = Search(romania)
