@@ -67,7 +67,10 @@ class Search:
                
       
 
-
+   
+def __repr__(self):
+   return (self.start.name + " --> " + self.end.name)
+setattr(Edge,"__repr__",__repr__)
 
 search = Search(romania)
-print(search.bfs(romania.getNode("Bu"), romania.getNode("Ti")))
+print(search.bfs(getNode("Bu",romania.nodes), getNode("Ti",romania.nodes)))
