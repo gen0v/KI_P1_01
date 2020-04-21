@@ -117,8 +117,12 @@ class Search:
                child.path = child.path + node.path
                child.path.append(edge)
                #save the edge
+               #needs to stay else heap not working
                child.value = node.value + edge.value
                if child == ept:
+                  child.value = 0
+                  for ed in child.path:
+                     child.value+=ed.value
                   return (child.value, child.path)
                heapq.heappush(heap,child)
             elif child in heap:
@@ -153,4 +157,4 @@ print("DFS from BU to TI")
 print(search.dfs(getNode("Bu",romania.nodes), getNode("Ti",romania.nodes)))
 
 print("UCS from BU to TI")
-print(search.ucs(getNode("Bu",romania.nodes), getNode("Ti",romania.nodes)))
+print(search.ucs(getNode("Ti",romania.nodes), getNode("Bu",romania.nodes)))
