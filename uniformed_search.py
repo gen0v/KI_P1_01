@@ -11,6 +11,8 @@ from graph import Node, Edge, Graph
 from utils import getNode
 
 import heapq
+     
+
 
 romania = Graph( ['Or', 'Ne', 'Ze', 'Ia', 'Ar', 'Si', 'Fa',
  'Va', 'Ri', 'Ti', 'Lu', 'Pi', 'Ur', 'Hi',
@@ -112,10 +114,12 @@ class Search:
          for edge in node.edges:
             child = edge.end
             if child not in explored and child not in heap:
+               child.path = child.path + node.path
+               child.path.append(edge)
                #save the edge
                child.value = node.value + edge.value
                if child == ept:
-                  return (child.value, "")
+                  return (child.value, child.path)
                heapq.heappush(heap,child)
             elif child in heap:
                heapq.heapreplace(heap, child)
@@ -138,7 +142,7 @@ def __lt__E(self, other: Edge):
 setattr(Node,"__lt__",__lt__N)
 setattr(Edge,"__lt__",__lt__E)
 setattr(Edge,"__repr__",__repr__)
-
+setattr(Node,"path",[])
 
 search = Search(romania)
 
