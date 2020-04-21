@@ -10,6 +10,8 @@ from queue import Queue, LifoQueue, PriorityQueue
 from graph import Node, Edge, Graph
 from utils import getNode
 
+import heapq
+
 romania = Graph( ['Or', 'Ne', 'Ze', 'Ia', 'Ar', 'Si', 'Fa',
  'Va', 'Ri', 'Ti', 'Lu', 'Pi', 'Ur', 'Hi',
  'Me', 'Bu', 'Dr', 'Ef', 'Cr', 'Gi'],
@@ -92,36 +94,32 @@ class Search:
                   return (child.value, childpath)
                frontier.put((child,childpath))
    
-   #TODO
+   
    def ucs(self, spt, ept) -> tuple:
       node = spt
       if node == ept:
          return (node,0)
-      frontier = PriorityQueue()
+      heap = []
       path = []
-      frontier.put((node, path))
+      heapq.heappush(heap, node)
       explored = []
       while 1:
          #print("---")
-         if frontier.empty():
+         if len(heap) == 0:
             return(node.value,path)
-         tpl = frontier.get()
-         node = tpl[0]
-         path = tpl[1]
+         node = heapq.heappop(heap)
          explored.append(node)
          for edge in node.edges:
             child = edge.end
-            childpath = []
-            #print(child.path)
-            if child not in explored:
+            if child not in explored and child not in heap:
                #save the edge
-               childpath = childpath + path
-               childpath.append(edge)
                child.value = node.value + edge.value
                if child == ept:
-                  #print (childpath)
-                  return (child.value, childpath)
-               frontier.put((child,childpath))
+                  return (child.value, "")
+               heapq.heappush(heap,child)
+            elif child in heap:
+               heapq.heapreplace(heap, child)
+            
 
 
                
@@ -130,9 +128,15 @@ class Search:
    
 def __repr__(self):
    return (self.start.name + " --> " + self.end.name)
-def 
 
+def __lt__N(self, other: Node):
+   return self.value < other.value
 
+def __lt__E(self, other: Edge):
+   return self.value < other.value
+
+setattr(Node,"__lt__",__lt__N)
+setattr(Edge,"__lt__",__lt__E)
 setattr(Edge,"__repr__",__repr__)
 
 
@@ -144,6 +148,5 @@ print(search.bfs(getNode("Bu",romania.nodes), getNode("Ti",romania.nodes)))
 print("DFS from BU to TI")
 print(search.dfs(getNode("Bu",romania.nodes), getNode("Ti",romania.nodes)))
 
-#TODO
 print("UCS from BU to TI")
 print(search.ucs(getNode("Bu",romania.nodes), getNode("Ti",romania.nodes)))
