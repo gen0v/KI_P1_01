@@ -35,8 +35,12 @@ romania = Graph( ['Or', 'Ne', 'Ze', 'Ia', 'Ar', 'Si', 'Fa',
 class Search:
    def __init__(self, graph: Graph):
       self.graph = graph
+      self.backup_graph = graph
+   def reset(self):
+      self.graph = self.backup_graph
    
    def dfs(self, spt, ept) -> tuple:
+      self.reset()
       node = spt
       if node == ept:
          return (node,0)
@@ -67,6 +71,7 @@ class Search:
                frontier.put((child,childpath))
 
    def bfs(self, spt, ept) -> tuple:
+      self.reset()
       node = spt
       if node == ept:
          return (node,0)
@@ -96,8 +101,8 @@ class Search:
                   return (child.value, childpath)
                frontier.put((child,childpath))
    
-   
    def ucs(self, spt, ept) -> tuple:
+      self.reset()
       node = spt
       if node == ept:
          return (node,0)
