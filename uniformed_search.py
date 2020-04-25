@@ -106,24 +106,53 @@ class Search:
          if len(heap) == 0:
             return(node.value,path)
          node = heapq.heappop(heap)
+         # print("Going to " + node.name)
          explored.append(node)
+         if node == ept:
+            node.value = 0
+            for ed in node.path:
+               node.value+=ed.value
+            return (node.value, node.path)
          for edge in node.edges:
             child = edge.end
+            # print("Child = " + child.name)
+            # ("Childvalue = " + str(child.value))
             if child not in explored and child not in heap:
                child.path = child.path + node.path
                child.path.append(edge)
                #save the edge
                #needs to stay else heap not working
                child.value = node.value + edge.value
-               if child == ept:
-                  child.value = 0
-                  for ed in child.path:
-                     child.value+=ed.value
-                  return (child.value, child.path)
+               # print("Pushing " + child.name)
                heapq.heappush(heap,child)
             elif child in heap:
-               heapq.heapreplace(heap, child)
-            
+               newvalue = node.value + edge.value
+               # find and replace if value smaller and heapify
+               count = 0
+               for x in heap:
+                  if x.name == child.name:
+                     if x.value > newvalue:
+                        # print("Replacing : " + str(x.value) + " with " + str(newvalue))
+                        #replace
+                        # print("Replacing " + x.name + " with " + child.name)
+                        # Overwrite childpath
+                        child.path = node.path
+                        # save the edge
+                        # needs to stay else heap not working
+                        child.path.append(edge)
+                        # Overwrite child.value
+                        child.value = node.value + edge.value
+                        # replace with cheaper way
+                        heap[count] = child
+                        # heapify the heap as it is broken because of replacing
+                        heapq.heapify(heap)
+                        
+                     else:
+                        break
+                  count += 1
+            # for x in heap:
+            #    print(x.name + " " + str(x.value))
+            # print("---")
 
 
                
@@ -158,4 +187,4 @@ print("DFS from BU to TI")
 print(search.dfs(getNode("Bu",romania.nodes), getNode("Ti",romania.nodes)))
 
 print("UCS from BU to TI")
-print(search.ucs(getNode("Ti",romania.nodes), getNode("Bu",romania.nodes)))
+print(search.ucs(getNode("Bu",romania.nodes), getNode("Ti",romania.nodes)))
